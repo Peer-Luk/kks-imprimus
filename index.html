@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KKS-IMPRIMUS | Schülerfirma</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    header {
+      background-color: #1e3a8a;
+      color: white;
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      background: #2b4db3;
+      padding: 0.75rem 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+    h2 {
+      border-left: 5px solid #1e3a8a;
+      padding-left: 10px;
+    }
+    .gallery, .idea-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .card, .idea-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      padding: 1rem;
+      transition: transform 0.2s;
+      position: relative;
+    }
+    .card:hover, .idea-card:hover {
+      transform: scale(1.03);
+    }
+    .card img, .idea-card img {
+      max-width: 100%;
+      border-radius: 8px;
+      height: auto;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    footer {
+      background-color: #1e3a8a;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 3rem;
+    }
+    #admin-section {
+      display: none;
+    }
+    .form-section {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: #e0e7ff;
+      border-radius: 8px;
+    }
+    .error {
+      color: red;
+      margin-top: 0.5rem;
+    }
+    .info {
+      color: #0b5394;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>KKS-IMPRIMUS</h1>
+    <p>Deine Schülerfirma für kreative Textildrucke</p>
+  </header>
+
+  <nav>
+    <a href="#home">Start</a>
+    <a href="#produkte">Produkte</a>
+    <a href="#ideen">Ideen</a>
+    <a href="#kontakt">Kontakt</a>
+    <a href="#admin">Admin</a>
+  </nav>
+
+  <main>
+    <section id="home">
+      <h2>Willkommen bei KKS-IMPRIMUS</h2>
+      <p>Wir sind die Schülerfirma der KKS und gestalten coole T-Shirts, Pullover und Beutel mit einzigartigen Motiven. Schau dich um und lass dich inspirieren!</p>
+    </section>
+
+    <section id="produkte">
+      <h2>Unsere Designs</h2>
+      <div id="gallery" class="gallery" aria-live="polite"></div>
+    </section>
+
+    <section id="ideen">
+      <h2>Ideen für neue Motive</h2>
+      <div id="ideaGallery" class="idea-gallery" aria-live="polite"></div>
+    </section>
+
+    <section id="kontakt">
+      <h2>Kontakt</h2>
+      <p>Hast du Fragen oder eigene Design-Ideen? Schreib uns über <strong>Itslearning</strong> eine Nachricht an <strong>Peer Meier von Rouden</strong> oder <strong>Luk Meier von Rouden</strong></p>
+    </section>
+
+    <section id="admin">
+      <h2>Adminbereich</h2>
+
+      <div id="login-section" aria-hidden="false">
+        <label for="password">Passwort eingeben</label><br>
+        <input type="password" id="password" placeholder="Passwort eingeben" aria-label="Admin-Passwort">
+        <button id="loginBtn">Login</button>
+        <p id="login-error" class="error" aria-live="assertive"></p>
+        <p class="info">Hinweis: Diese Demo verwendet client-side Login (nicht sicher). Für echten Schutz bitte Server-Authentifizierung verwenden.</p>
+      </div>
+
+      <div id="admin-section" aria-hidden="true">
+        <div class="form-section">
+          <h3>Design hinzufügen</h3>
+          <form id="designForm">
+            <label for="designName">Name des Designs:</label><br>
+            <input type="text" id="designName" required><br><br>
+
+            <label for="designCategory">Kategorie:</label><br>
+            <select id="designCategory">
+              <option value="T-Shirt">T-Shirt</option>
+              <option value="Pullover">Pullover</option>
+              <option value="Sportbeutel">Sportbeutel</option>
+              <option value="Beutel">Beutel</option>
+            </select><br><br>
+
+            <label for="designImage">Bild hochladen (max 1MB):</label><br>
+            <input type="file" id="designImage" accept="image/*" required aria-describedby="designImageHelp"><br>
+            <small id="designImageHelp">Empfohlen: JPG/PNG. Max-Größe: 1 MB (lokales Demo-Limit).</small><br><br>
+
+            <button type="submit">Design speichern</button>
+            <p id="design-error" class="error" aria-live="assertive"></p>
+          </form>
+        </div>
+
+        <div class="form-section">
+          <h3>Idee hinzufügen</h3>
+          <form id="ideaForm">
+            <label for="ideaName">Name der Idee:</label><br>
+            <input type="text" id="ideaName" required><br><br>
+            <label for="ideaImage">Bild hochladen (max 1MB):</label><br>
+            <input type="file" id="ideaImage" accept="image/*" required aria-describedby="ideaImageHelp"><br>
+            <small id="ideaImageHelp">Empfohlen: JPG/PNG. Max-Größe: 1 MB (lokales Demo-Limit).</small><br><br>
+            <button type="submit">Idee speichern</button>
+            <p id="idea-error" class="error" aria-live="assertive"></p>
+          </form>
+        </div>
+
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 KKS-IMPRIMUS | Schülerfirma der KKS</p>
+  </footer>
+
+  <script>
+    /*
+      IMPORTANT:
+      - This page is a static demo. Embedding admin passwords or secrets in client-side JavaScript is insecure.
+      - For production: move auth and uploads to a server (e.g., Node/Express + DB or Firebase Auth + Storage).
+    */
+
+    // Demo-only password (INSECURE: visible in page source). Replace with server-side auth in production.
+    const PASSWORD = "imprimus2025";
+
+    // Limit for client-side image storage (in bytes). localStorage cannot hold many/large images.
+    const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1 MB
+
+    // Admin state persisted for the session only
+    function setAdminSession(val) {
+      sessionStorage.setItem("isAdmin", val ? "1" : "0");
+      if (val) {
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("admin-section").style.display = "block";
+        document.getElementById("admin-section").setAttribute("aria-hidden", "false");
+        document.getElementById("login-section").setAttribute("aria-hidden", "true");
+      } else {
+        document.getElementById("login-section").style.display = "block";
+        document.getElementById("admin-section").style.display = "none";
+        document.getElementById("admin-section").setAttribute("aria-hidden", "true");
+        document.getElementById("login-section").setAttribute("aria-hidden", "false");
+      }
+    }
+
+    function isAdminSession() {
+      return sessionStorage.getItem("isAdmin") === "1";
+    }
+
+    // Initialize UI according to session
+    document.addEventListener("DOMContentLoaded", () => {
+      const loginBtn = document.getElementById("loginBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const designForm = document.getElementById("designForm");
+      const ideaForm = document.getElementById("ideaForm");
+
+      // Set initial admin state
+      setAdminSession(isAdminSession());
+
+      loginBtn.addEventListener("click", checkLogin);
+      logoutBtn.addEventListener("click", () => {
+        sessionStorage.removeItem("isAdmin");
+        setAdminSession(false);
+      });
+
+      designForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        document.getElementById("design-error").textContent = "";
+        const name = document.getElementById("designName").value.trim();
+        const category = document.getElementById("designCategory").value;
+        const fileInput = document.getElementById("designImage");
+        const file = fileInput.files[0];
+        if (!file) {
+          document.getElementById("design-error").textContent = "Bitte eine Bilddatei auswählen.";
+          return;
+        }
+        if (!file.type.startsWith("image/")) {
+          document.getElementById("design-error").textContent = "Nur Bilder erlaubt (JPG/PNG/GIF).";
+          return;
+        }
+        if (file.size > MAX_IMAGE_SIZE) {
+          document.getElementById("design-error").textContent = "Bild zu groß. Maximal 1 MB.";
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          try {
+            const designs = JSON.parse(localStorage.getItem("designs") || "[]");
+            designs.push({ name, category, image: event.target.result, createdAt: new Date().toISOString() });
+            // Warning: storing many images here will exceed localStorage quota quickly.
+            localStorage.setItem("designs", JSON.stringify(designs));
+            loadDesigns();
+            designForm.reset();
+          } catch (err) {
+            document.getElementById("design-error").textContent = "Fehler beim Speichern. LocalStorage evtl. voll.";
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+
+      ideaForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        document.getElementById("idea-error").textContent = "";
+        const name = document.getElementById("ideaName").value.trim();
+        const fileInput = document.getElementById("ideaImage");
+        const file = fileInput.files[0];
+        if (!file) {
+          document.getElementById("idea-error").textContent = "Bitte eine Bilddatei auswählen.";
+          return;
+        }
+        if (!file.type.startsWith("image/")) {
+          document.getElementById("idea-error").textContent = "Nur Bilder erlaubt (JPG/PNG/GIF).";
+          return;
+        }
+        if (file.size > MAX_IMAGE_SIZE) {
+          document.getElementById("idea-error").textContent = "Bild zu groß. Maximal 1 MB.";
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          try {
+            const ideas = JSON.parse(localStorage.getItem("ideas") || "[]");
+            ideas.push({ name, image: event.target.result, createdAt: new Date().toISOString() });
+            localStorage.setItem("ideas", JSON.stringify(ideas));
+            loadIdeas();
+            ideaForm.reset();
+          } catch (err) {
+            document.getElementById("idea-error").textContent = "Fehler beim Speichern. LocalStorage evtl. voll.";
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+
+      loadDesigns();
+      loadIdeas();
+    });
+
+    function checkLogin() {
+      const inputEl = document.getElementById("password");
+      const error = document.getElementById("login-error");
+      error.textContent = "";
+      const input = (inputEl.value || "").trim();
+      if (!input) {
+        error.textContent = "Bitte Passwort eingeben.";
+        return;
+      }
+      // Demo-only check: compare plaintext (INSECURE). Replace with server-side auth for production.
+      if (input === PASSWORD) {
+        setAdminSession(true);
+        loadDesigns();
+        loadIdeas();
+        inputEl.value = "";
+      } else {
+        error.textContent = "Falsches Passwort!";
+      }
+    }
+
+    function loadDesigns() {
+      const gallery = document.getElementById("gallery");
+      gallery.innerHTML = "";
+      const designs = JSON.parse(localStorage.getItem("designs") || "[]");
+      designs.forEach((design, index) => {
+        const div = document.createElement("div");
+        div.className = "card";
+        const deleteBtn = isAdminSession() ? `<button class="delete-btn" data-index="${index}" data-type="design" title="Löschen">&times;</button>` : "";
+        div.innerHTML = `
+          ${deleteBtn}
+          <img src="${design.image}" alt="${escapeHtml(design.name)}">
+          <h3>${escapeHtml(design.name)}</h3>
+          <p>${escapeHtml(design.category)}</p>
+        `;
+        gallery.appendChild(div);
+      });
+
+      // Attach delete handlers (delegated)
+      gallery.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const idx = Number(e.currentTarget.getAttribute("data-index"));
+          if (!isAdminSession()) { alert("Nur Admins dürfen Designs löschen!"); return; }
+          if (!confirm("Design wirklich löschen?")) return;
+          deleteDesign(idx);
+        });
+      });
+    }
+
+    function loadIdeas() {
+      const ideaGallery = document.getElementById("ideaGallery");
+      ideaGallery.innerHTML = "";
+      const ideas = JSON.parse(localStorage.getItem("ideas") || "[]");
+      ideas.forEach((idea, index) => {
+        const div = document.createElement("div");
+        div.className = "idea-card";
+        const deleteBtn = isAdminSession() ? `<button class="delete-btn" data-index="${index}" data-type="idea" title="Löschen">&times;</button>` : "";
+        div.innerHTML = `
+          ${deleteBtn}
+          <img src="${idea.image}" alt="${escapeHtml(idea.name)}">
+          <h3>${escapeHtml(idea.name)}</h3>
+        `;
+        ideaGallery.appendChild(div);
+      });
+
+      ideaGallery.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const idx = Number(e.currentTarget.getAttribute("data-index"));
+          if (!isAdminSession()) { alert("Nur Admins dürfen Ideen löschen!"); return; }
+          if (!confirm("Idee wirklich löschen?")) return;
+          deleteIdea(idx);
+        });
+      });
+    }
+
+    function deleteDesign(index) {
+      if (!isAdminSession()) { alert("Nur Admins dürfen Designs löschen!"); return; }
+      const designs = JSON.parse(localStorage.getItem("designs") || "[]");
+      if (index < 0 || index >= designs.length) return;
+      designs.splice(index, 1);
+      localStorage.setItem("designs", JSON.stringify(designs));
+      loadDesigns();
+    }
+
+    function deleteIdea(index) {
+      if (!isAdminSession()) { alert("Nur Admins dürfen Ideen löschen!"); return; }
+      const ideas = JSON.parse(localStorage.getItem("ideas") || "[]");
+      if (index < 0 || index >= ideas.length) return;
+      ideas.splice(index, 1);
+      localStorage.setItem("ideas", JSON.stringify(ideas));
+      loadIdeas();
+    }
+
+    // Small escaping helper to avoid injecting HTML from stored fields (basic XSS prevention).
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+  </script>
+</body>
+</html>
